@@ -6,7 +6,7 @@
 Aplikacja miała za zadanie tworzyć prosty interfejs webowy który umożliwi czytanie i dodawanie informacji na temat pokemonów.  
 Są dostępne cztery tabele:  
 - Trainer - Można w niej dodawać i wyświetlać dane trenera oraz wybrać spośród dodanych do aplkacji pokemonów swojego
-- Pokemon - Można dodawać i wyświetlać dane pokemona oraz wybrane z dostępnych ataków, i przypisać jeden z dostępnych typów, wyświetla również słabe i mocne strony pokemona dostępne z tabeli Type_pok
+- Pokemon - Można dodawać i wyświetlać dane pokemona oraz wybrać atak z dostępnych w tabeli Attacks, przypisać jeden z dostępnych typów, wyświetla również słabe i mocne strony pokemona dostępne z tabeli Type_pok
 - Attacks -  Można dodawać i wyświetlać dane dotyczące dostępnych ataków i jakiego są one typu, oraz jego słabe i mocne strony
 - Type_pok - Można dodawać i wyświetlać dane dotyczące dostępnych typów
 
