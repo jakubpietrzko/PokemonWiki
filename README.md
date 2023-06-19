@@ -1,15 +1,16 @@
 # PokemonWiki
 
-4 Tabelki 
+### Autorzy: Jakub Pietrzko (grupa pt 16:00), Jan Stryszewski (grupa pt 17:30)
 
--trener ktory ma jednego pokemona z tabeli pokemony 
+## Opis
+Aplikacja miała za zadanie tworzyć prosty interfejs webowy który umożliwy czytanie i dodawanie informacji na temat pokemonów.  
+Są dostępne cztery tabele:  
+- Trainer - Można w niej dodawać i wyświetlać dane trenera oraz wybrać spośród dodanych do aplkacji pokemonów swojego
+- Pokemon - Mozna dodawać i wyświetlać dane pokemona oraz wybrane z dostępnych ataków, i przypisać jeden z dostępnych typów
+- Attacks -  Mozna dodawać i wyświetlać dane dotyczące dostępnych ataków i jakiego są one typu
+- Type_pok - Mozna dodawać i wyświetlać dane dotyczące dostępnych typów
 
--pokemon ktory ma swoj typ i atak
 
--atak ktory ma swoj typ
+## Jak uruchmoic aplikację:
+Wystarczy, że w terminalu podamy komendę: __dotenet run__ a następnie w przeglądarce internetwoej wpisujemy adres naszego lokalnego hosta: _http://localhost:5113_
 
--typ ktroy nie ma dalszych odwolan
-
-co dziala juz:
-
--da sie tworzyc w create  kazdej tabelce i wyswietlac je w indexie 
