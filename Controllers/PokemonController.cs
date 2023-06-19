@@ -30,7 +30,9 @@ namespace PokemonWiki.Controllers
             // Zamień ID typu na jego nazwę
             foreach (var pokemon in pokemonList)
             {
+
                 pokemon.Type = _context.Type_pok.FirstOrDefault(t => t.Id == pokemon.TypeId);
+                
             }
 
             // Zamień ID ataku na jego nazwę
@@ -86,60 +88,78 @@ public async Task<IActionResult> Create([Bind("Id,Name,TypeId,AttackId")] Pokemo
 }
 
 
-        // GET: Pokemon/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+       // GET: Pokemon/Edit/5
+public async Task<IActionResult> Edit(int? id)
+{
+    if (id == null || _context.Pokemon == null)
+    {
+        return NotFound();
+    }
+
+    var pokemon = await _context.Pokemon.FindAsync(id);
+    if (pokemon == null)
+    {
+        return NotFound();
+    }
+    
+    // Pobierz nazwę typu i nazwę ataku dla widoku
+    var type = await _context.Type_pok.FindAsync(pokemon.TypeId);
+    var attack = await _context.Attacks.FindAsync(pokemon.AttackId);
+    
+    ViewData["TypeId"] = new SelectList(_context.Type_pok, "Id", "TypeName", pokemon.TypeId);
+    ViewData["AttackId"] = new SelectList(_context.Attacks, "Id", "AttackName", pokemon.AttackId);
+    
+    // Przekaż nazwy typu i ataku do widoku
+    ViewData["TypeName"] = type.TypeName;
+    ViewData["AttackName"] = attack.AttackName;
+    
+    return View(pokemon);
+}
+
+// POST: Pokemon/Edit/5
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Edit(int id, [Bind("Id,Name,TypeId,AttackId")] Pokemon pokemon)
+{
+    if (id != pokemon.Id)
+    {
+        return NotFound();
+    }
+
+    if (ModelState.IsValid)
+    {
+        try
         {
-            if (id == null || _context.Pokemon == null)
-            {
-                return NotFound();
-            }
-
-            var pokemon = await _context.Pokemon.FindAsync(id);
-            if (pokemon == null)
-            {
-                return NotFound();
-            }
-            ViewData["AttackId"] = new SelectList(_context.Set<Attacks>(), "Id", "Id", pokemon.AttackId);
-            ViewData["TypeId"] = new SelectList(_context.Set<Type_pok>(), "Id", "Id", pokemon.TypeId);
-            return View(pokemon);
+            _context.Update(pokemon);
+            await _context.SaveChangesAsync();
         }
-
-        // POST: Pokemon/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,TypeId,AttackId")] Pokemon pokemon)
+        catch (DbUpdateConcurrencyException)
         {
-            if (id != pokemon.Id)
+            if (!PokemonExists(pokemon.Id))
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            else
             {
-                try
-                {
-                    _context.Update(pokemon);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PokemonExists(pokemon.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                throw;
             }
-            ViewData["AttackId"] = new SelectList(_context.Set<Attacks>(), "Id", "Id", pokemon.AttackId);
-            ViewData["TypeId"] = new SelectList(_context.Set<Type_pok>(), "Id", "Id", pokemon.TypeId);
-            return View(pokemon);
         }
+        return RedirectToAction(nameof(Index));
+    }
+    
+    // Pobierz nazwę typu i nazwę ataku dla widoku
+    var type = await _context.Type_pok.FindAsync(pokemon.TypeId);
+    var attack = await _context.Attacks.FindAsync(pokemon.AttackId);
+    
+    ViewData["AttackId"] = new SelectList(_context.Set<Attacks>(), "Id", "Id", pokemon.AttackId);
+    ViewData["TypeId"] = new SelectList(_context.Set<Type_pok>(), "Id", "Id", pokemon.TypeId);
+    
+    // Przekaż nazwy typu i ataku do widoku
+    ViewData["TypeName"] = type.TypeName;
+    ViewData["AttackName"] = attack.AttackName;
+    
+    return View(pokemon);
+}
 
         // GET: Pokemon/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -186,3 +206,4 @@ public async Task<IActionResult> Create([Bind("Id,Name,TypeId,AttackId")] Pokemo
         }
     }
 }
+
