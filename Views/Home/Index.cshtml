@@ -2,7 +2,16 @@
     ViewData["Title"] = "Home Page";
 }
 
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Witaj na Pokemon Wiki!</h1>
+    <p>Wybierz kategorię:</p>
+    <ul>
+        <li><a asp-controller="Pokemon" asp-action="Index">Pokemon</a></li>
+        <li><a asp-controller="Attacks" asp-action="Index">Attacks</a></li>
+        <li><a asp-controller="Trainer" asp-action="Index">Trainer</a></li>
+        <li><a asp-controller="Type_pok" asp-action="Index">Type_pok</a></li>
+    </ul>
 </div>
+<img src="~/images/531972.jpeg" alt="Pokemon" width="1000" />
+
