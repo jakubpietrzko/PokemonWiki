@@ -1,10 +1,15 @@
 # PokemonWiki
 
-4 Tabelki \n
-trener ktory ma jednego pokemona z tabeli pokemony /n
-pokemon ktory ma swoj typ i atak/n
-atak ktory ma swoj typ/n
-typ ktroy nie ma dalszych odwolan/n
+4 Tabelki 
 
-co dziala juz:/n
-da sie tworzyc w create  kazdej tabelce i wyswietlac je w indexie 
+-trener ktory ma jednego pokemona z tabeli pokemony 
+
+-pokemon ktory ma swoj typ i atak
+
+-atak ktory ma swoj typ
+
+-typ ktroy nie ma dalszych odwolan
+
+co dziala juz:
+
+-da sie tworzyc w create  kazdej tabelce i wyswietlac je w indexie 
