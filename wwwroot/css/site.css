@@ -18,5 +18,7 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+  background-color: #F9CA0A;
+  font-family: 'Pokemon Solid', sans-serif;
+  font-weight: bold;
 }
