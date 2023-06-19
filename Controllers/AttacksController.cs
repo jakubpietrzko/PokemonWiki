@@ -10,132 +10,121 @@ using PokemonWiki.Models;
 
 namespace PokemonWiki.Controllers
 {
-    public class PokemonController : Controller
+    public class AttacksController : Controller
     {
         private readonly PokemonWikiContext _context;
 
-        public PokemonController(PokemonWikiContext context)
+        public AttacksController(PokemonWikiContext context)
         {
             _context = context;
         }
 
-       // GET: Pokemon
+        // GET: Attacks
         public async Task<IActionResult> Index()
         {
-            var pokemonList = await _context.Pokemon
-                .Include(p => p.Type)
-                .Include(p => p.Attack)
-                .ToListAsync();
+            var pokemonWikiContext = _context.Attacks.Include(a => a.Type);
+            var attacksList = await pokemonWikiContext.ToListAsync();
 
             // Zamień ID typu na jego nazwę
-            foreach (var pokemon in pokemonList)
+            foreach (var attack in attacksList)
             {
-
-                pokemon.Type = _context.Type_pok.FirstOrDefault(t => t.Id == pokemon.TypeId);
-                
+                attack.Type = _context.Type_pok.FirstOrDefault(t => t.Id == attack.TypeId);
             }
 
-            // Zamień ID ataku na jego nazwę
-            foreach (var pokemon in pokemonList)
-            {
-                pokemon.Attack = _context.Attacks.FirstOrDefault(a => a.Id == pokemon.AttackId);
-            }
-
-            return View(pokemonList);
+            return View(attacksList);
         }
 
-        // GET: Pokemon/Details/5
+        // GET: Attacks/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Pokemon == null)
+            if (id == null || _context.Attacks == null)
             {
                 return NotFound();
             }
 
-            var pokemon = await _context.Pokemon
-                .Include(p => p.Attack)
-                .Include(p => p.Type)
+            var attacks = await _context.Attacks
+                .Include(a => a.Type)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (pokemon == null)
+            if (attacks == null)
             {
                 return NotFound();
             }
 
-            return View(pokemon);
-        }
-// GET: Pokemon/Create
-public IActionResult Create()
-{
-    ViewData["TypeId"] = new SelectList(_context.Type_pok, "Id", "TypeName");
-    ViewData["AttackId"] = new SelectList(_context.Attacks, "Id", "AttackName");
-    return View();
-}
+            // Zamień ID typu na jego nazwę
+            attacks.Type = _context.Type_pok.FirstOrDefault(t => t.Id == attacks.TypeId);
 
-// POST: Pokemon/Create
+            return View(attacks);
+        }
+
+        // GET: Attacks/Create
+        public IActionResult Create()
+        {
+            ViewData["Types"] = new SelectList(_context.Type_pok, "Id", "TypeName");
+            return View();
+        }
+
+        // POST: Attacks/Create
 [HttpPost]
 [ValidateAntiForgeryToken]
-public async Task<IActionResult> Create([Bind("Id,Name,TypeId,AttackId")] Pokemon pokemon)
+public async Task<IActionResult> Create([Bind("Id,AttackName,Power,TypeId")] Attacks attacks)
 {
     if (ModelState.IsValid)
     {
-        _context.Add(pokemon);
+        // Pobierz obiekt typu na podstawie wybranego ID
+        attacks.Type = await _context.Type_pok.FindAsync(attacks.TypeId);
+
+        _context.Add(attacks);
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
-    ViewData["TypeId"] = new SelectList(_context.Type_pok, "Id", "TypeName", pokemon.TypeId);
-    ViewData["AttackId"] = new SelectList(_context.Attacks, "Id", "AttackName", pokemon.AttackId);
-    return View(pokemon);
+
+    ViewData["Types"] = new SelectList(_context.Type_pok, "Id", "TypeName", attacks.TypeId);
+    return View(attacks);
 }
 
-
-       // GET: Pokemon/Edit/5
+        // GET: Attacks/Edit/5
 public async Task<IActionResult> Edit(int? id)
 {
-    if (id == null || _context.Pokemon == null)
+    if (id == null || _context.Attacks == null)
     {
         return NotFound();
     }
 
-    var pokemon = await _context.Pokemon.FindAsync(id);
-    if (pokemon == null)
+    var attacks = await _context.Attacks.FindAsync(id);
+    if (attacks == null)
     {
         return NotFound();
     }
-    
     // Pobierz nazwę typu i nazwę ataku dla widoku
-    var type = await _context.Type_pok.FindAsync(pokemon.TypeId);
-    var attack = await _context.Attacks.FindAsync(pokemon.AttackId);
-    
-    ViewData["TypeId"] = new SelectList(_context.Type_pok, "Id", "TypeName", pokemon.TypeId);
-    ViewData["AttackId"] = new SelectList(_context.Attacks, "Id", "AttackName", pokemon.AttackId);
-    
-    // Przekaż nazwy typu i ataku do widoku
+    var type = await _context.Type_pok.FindAsync(attacks.TypeId);
+
+    ViewData["Types"] = new SelectList(_context.Type_pok, "Id", "TypeName", attacks.TypeId);
     ViewData["TypeName"] = type.TypeName;
-    ViewData["AttackName"] = attack.AttackName;
-    
-    return View(pokemon);
+
+    return View(attacks);
 }
 
-// POST: Pokemon/Edit/5
+// POST: Attacks/Edit/5
 [HttpPost]
 [ValidateAntiForgeryToken]
-public async Task<IActionResult> Edit(int id, [Bind("Id,Name,TypeId,AttackId")] Pokemon pokemon)
+public async Task<IActionResult> Edit(int id, [Bind("Id,AttackName,Power,TypeId")] Attacks attacks)
 {
-    if (id != pokemon.Id)
+    if (id != attacks.Id)
     {
         return NotFound();
     }
 
     if (ModelState.IsValid)
     {
+
         try
         {
-            _context.Update(pokemon);
+            _context.Update(attacks);
             await _context.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!PokemonExists(pokemon.Id))
+            if (!AttacksExists(attacks.Id))
             {
                 return NotFound();
             }
@@ -146,64 +135,54 @@ public async Task<IActionResult> Edit(int id, [Bind("Id,Name,TypeId,AttackId")] 
         }
         return RedirectToAction(nameof(Index));
     }
-    
-    // Pobierz nazwę typu i nazwę ataku dla widoku
-    var type = await _context.Type_pok.FindAsync(pokemon.TypeId);
-    var attack = await _context.Attacks.FindAsync(pokemon.AttackId);
-    
-    ViewData["AttackId"] = new SelectList(_context.Set<Attacks>(), "Id", "Id", pokemon.AttackId);
-    ViewData["TypeId"] = new SelectList(_context.Set<Type_pok>(), "Id", "Id", pokemon.TypeId);
-    
-    // Przekaż nazwy typu i ataku do widoku
+ var type = await _context.Type_pok.FindAsync(attacks.TypeId);
+       ViewData["TypeId"] = new SelectList(_context.Set<Type_pok>(), "Id", "Id", attacks.TypeId);
     ViewData["TypeName"] = type.TypeName;
-    ViewData["AttackName"] = attack.AttackName;
-    
-    return View(pokemon);
+    return View(attacks);
 }
 
-        // GET: Pokemon/Delete/5
+
+        // GET: Attacks/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Pokemon == null)
+            if (id == null || _context.Attacks == null)
             {
                 return NotFound();
             }
 
-            var pokemon = await _context.Pokemon
-                .Include(p => p.Attack)
-                .Include(p => p.Type)
+            var attacks = await _context.Attacks
+                .Include(a => a.Type)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (pokemon == null)
+            if (attacks == null)
             {
                 return NotFound();
             }
 
-            return View(pokemon);
+            return View(attacks);
         }
 
-        // POST: Pokemon/Delete/5
+        // POST: Attacks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Pokemon == null)
+            if (_context.Attacks == null)
             {
-                return Problem("Entity set 'PokemonWikiContext.Pokemon'  is null.");
+                return Problem("Entity set 'PokemonWikiContext.Attacks' is null.");
             }
-            var pokemon = await _context.Pokemon.FindAsync(id);
-            if (pokemon != null)
+            var attacks = await _context.Attacks.FindAsync(id);
+            if (attacks != null)
             {
-                _context.Pokemon.Remove(pokemon);
+                _context.Attacks.Remove(attacks);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PokemonExists(int id)
+        private bool AttacksExists(int id)
         {
-          return (_context.Pokemon?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Attacks?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
-
