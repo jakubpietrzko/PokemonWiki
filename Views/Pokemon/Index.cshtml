@@ -18,6 +18,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.Type.TypeName)
             </th>
+             <th>
+                @Html.DisplayNameFor(model => model.Type.Strengths)
+            </th>
+             <th>
+                @Html.DisplayNameFor(model => model.Type.Weaknesses)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Attack.AttackName)
             </th>
@@ -35,6 +41,12 @@
                 @Html.DisplayFor(modelItem => item.Type.TypeName)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Type.Strengths)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type.Weaknesses)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Attack.AttackName)
             </td>
             <td>
@@ -46,3 +58,4 @@
     }
     </tbody>
 </table>
+
