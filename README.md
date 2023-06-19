@@ -1,6 +1,6 @@
 # PokemonWiki
 
-4 Tabelki /n
+4 Tabelki \n
 trener ktory ma jednego pokemona z tabeli pokemony /n
 pokemon ktory ma swoj typ i atak/n
 atak ktory ma swoj typ/n
