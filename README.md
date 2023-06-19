@@ -12,5 +12,5 @@ Są dostępne cztery tabele:
 
 
 ## Jak uruchmoic aplikację:
-Wystarczy, że w terminalu podamy komendę: __dotenet run__ a następnie w przeglądarce internetwoej wpisujemy adres naszego lokalnego hosta: _http://localhost:5113_
+Wystarczy, że w terminalu podamy komendę: __dotenet run__ a następnie w przeglądarce internetowej wpisujemy adres naszego lokalnego hosta: _http://localhost:5113_
 
