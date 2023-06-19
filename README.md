@@ -12,6 +12,6 @@ Są dostępne cztery tabele:
   
 Dodatkową funkcjonalnością umożliwiającą ciekawe zestawienia jest możliwość sprawdzenia statystyk pokemona oraz jego atrybutów w jednym miejscu. W jednej przejrzystej tabeli zestawiamy typy pokemonów, typy ich ataków i ataki, ich superefektywność oraz słabości.
 
-## Jak uruchmoic aplikację:
+## Jak uruchomić aplikację:
 Wystarczy, że w terminalu podamy komendę: __dotnet run__ a następnie w przeglądarce internetowej wpisujemy adres naszego lokalnego hosta: _http://localhost:5113_
 
